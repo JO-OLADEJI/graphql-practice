@@ -1,27 +1,17 @@
 import express, { Express, Request, Response } from "express";
 import { graphqlHTTP } from "express-graphql";
-import { GraphQLSchema, GraphQLObjectType, GraphQLString } from "graphql";
-import { authors, books } from "./data";
+import { GraphQLSchema } from "graphql";
+import RootQueryType from "./types";
 
 const app: Express = express();
-
-const model = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: "greet",
-    fields: () => ({
-      message: {
-        type: GraphQLString,
-        resolve: () => "Hello GraphQL",
-      },
-    }),
-  }),
-});
 
 // middlewares
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: model,
+    schema: new GraphQLSchema({
+      query: RootQueryType,
+    }),
     graphiql: true,
   })
 );
