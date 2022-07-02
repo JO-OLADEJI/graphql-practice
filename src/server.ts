@@ -1,10 +1,34 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, Response } from "express";
+import { graphqlHTTP } from "express-graphql";
+import { GraphQLSchema, GraphQLObjectType, GraphQLString } from "graphql";
+import { authors, books } from "./data";
 
 const app: Express = express();
 
-app.use(express.json());
-app.get('/', (req: Request, res: Response) => {
-  res.send('graphql-practice');
+const model = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: "greet",
+    fields: () => ({
+      message: {
+        type: GraphQLString,
+        resolve: () => "Hello GraphQL",
+      },
+    }),
+  }),
 });
 
-app.listen(3001, () => console.debug('⚡️ Server running . . .'));
+// middlewares
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: model,
+    graphiql: true,
+  })
+);
+
+// routes
+app.get("/", (req: Request, res: Response) => {
+  res.send("graphql practice");
+});
+
+app.listen(3001, () => console.debug("⚡️ Server running . . ."));
