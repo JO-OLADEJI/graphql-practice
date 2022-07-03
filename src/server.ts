@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { GraphQLSchema } from "graphql";
-import RootQueryType from "./types";
+import { RootQueryType, RootMutationType } from "./types";
 
 const app: Express = express();
 
@@ -11,6 +11,7 @@ app.use(
   graphqlHTTP({
     schema: new GraphQLSchema({
       query: RootQueryType,
+      mutation: RootMutationType
     }),
     graphiql: true,
   })
@@ -21,4 +22,4 @@ app.get("/", (req: Request, res: Response) => {
   res.send("graphql practice");
 });
 
-app.listen(3001, () => console.debug("⚡️ Server running . . ."));
+app.listen(3000, () => console.debug("⚡️ Server running . . ."));
